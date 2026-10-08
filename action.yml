@@ -1,0 +1,31 @@
+name: Grape Reindex
+description: Re-index a Grape project from this repository after a push, so search and chat use the newest files.
+author: Grape Industries
+branding:
+  icon: refresh-cw
+  color: purple
+inputs:
+  project:
+    description: The Grape project ID. The project's Connect tab shows it.
+    required: true
+  token:
+    description: Your Grape API key. Keep it in a secret, for example secrets.GRAPE_API_KEY.
+    required: true
+  branch:
+    description: The branch that was pushed. It must be the branch the project follows.
+    required: false
+    default: ${{ github.ref_name }}
+  url:
+    description: The Grape address.
+    required: false
+    default: https://grape-inc.in
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: '"$GITHUB_ACTION_PATH/reindex.sh"'
+      env:
+        GRAPE_PROJECT: ${{ inputs.project }}
+        GRAPE_TOKEN: ${{ inputs.token }}
+        GRAPE_BRANCH: ${{ inputs.branch }}
+        GRAPE_URL: ${{ inputs.url }}
